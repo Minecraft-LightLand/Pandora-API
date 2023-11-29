@@ -4,6 +4,7 @@ import dev.xkmc.pandora.init.data.PandoraLangData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -12,6 +13,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PandoraHolder extends Item implements IPandoraHolder {
 
@@ -25,6 +27,11 @@ public class PandoraHolder extends Item implements IPandoraHolder {
 	@Override
 	public int getSlots(ItemStack stack) {
 		return size;
+	}
+
+	@Override
+	public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+		return InvTooltip.get(this, stack);
 	}
 
 	@Override

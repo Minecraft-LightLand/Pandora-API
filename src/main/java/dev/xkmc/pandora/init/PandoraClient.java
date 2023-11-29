@@ -2,11 +2,14 @@ package dev.xkmc.pandora.init;
 
 import dev.xkmc.l2tabs.tabs.core.TabRegistry;
 import dev.xkmc.l2tabs.tabs.core.TabToken;
+import dev.xkmc.pandora.content.base.InvClientTooltip;
+import dev.xkmc.pandora.content.base.InvTooltip;
 import dev.xkmc.pandora.content.menu.TabPandora;
 import dev.xkmc.pandora.init.data.PandoraLangData;
 import dev.xkmc.pandora.init.registrate.PandoraItems;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,6 +25,11 @@ public class PandoraClient {
 		event.enqueueWork(() -> {
 			TAB_PANDORA = TabRegistry.registerTab(2010, TabPandora::new, PandoraItems.PANDORA_NECKLACE::get, PandoraLangData.TITLE.get());
 		});
+	}
+
+	@SubscribeEvent
+	public static void registerClientTooltip(RegisterClientTooltipComponentFactoriesEvent event) {
+		event.register(InvTooltip.class, InvClientTooltip::new);
 	}
 
 	@SubscribeEvent
