@@ -24,21 +24,28 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 import java.util.List;
 import java.util.UUID;
 
-public class BasePandoraInvWrapper implements IItemHandlerModifiable {
+public class BasePandoraInvWrapper implements IItemHandlerModifiable, ICurio, ICapabilityProvider {
 
 	private final ItemStack stack;
-	private final IPandoraHolder bag;
+	private final IPandoraHolder item;
 	private ListTag cachedTag;
 	private List<ItemStack> itemStacksCache;
 
+	private final LazyOptional<BasePandoraInvWrapper> handler = LazyOptional.of(() -> this);
+
 	public BasePandoraInvWrapper(ItemStack stack) {
 		this.stack = stack;
-		this.bag = (IPandoraHolder) stack.getItem();
+		this.item = (IPandoraHolder) stack.getItem();
+	}
+
+	@Override
+	public ItemStack getStack() {
+		return stack;
 	}
 
 	@Override
 	public int getSlots() {
-		return bag.getSlots(stack);
+		return item.getSlots(stack);
 	}
 
 	@Override
@@ -135,7 +142,7 @@ public class BasePandoraInvWrapper implements IItemHandlerModifiable {
 
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
-		return stack.isEmpty() || bag.isItemValid(slot, stack);
+		return stack.isEmpty() || item.isItemValid(slot, stack);
 	}
 
 	@Override
@@ -168,6 +175,25 @@ public class BasePandoraInvWrapper implements IItemHandlerModifiable {
 		IPandoraHolder.setItems(stack, itemStacks);
 		cachedTag = IPandoraHolder.getListTag(stack);
 		itemStacksCache = null;
+	}
+
+	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid) {
+		Multimap<Attribute, AttributeModifier> map = HashMultimap.create();
+		CuriosApi.addSlotModifier(map, PandoraSlotGen.NAME, uuid, item.getSlots(stack), AttributeModifier.Operation.ADDITION);
+		return map;
+	}
+
+	@Override
+	@NotNull
+	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+		if (cap == ForgeCapabilities.ITEM_HANDLER) {
+			return handler.cast();
+		}
+		if (cap == CuriosCapability.ITEM) {
+			return handler.cast();
+		}
+		return LazyOptional.empty();
 	}
 
 }

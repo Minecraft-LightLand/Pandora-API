@@ -34,7 +34,7 @@ public class PandoraHolder extends Item implements IPandoraHolder {
 
 	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new PandoraCapProvider(this, stack);
+		return new BasePandoraInvWrapper(stack);
 	}
 
 }
