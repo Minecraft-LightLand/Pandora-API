@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class SlotGen extends RecordDataProvider {
+public class PandoraSlotGen extends RecordDataProvider {
 
 	public static final String NAME = "pandora_charm";
 
-	public SlotGen(DataGenerator generator) {
+	public PandoraSlotGen(DataGenerator generator) {
 		super(generator, "Curios Generator");
 	}
 

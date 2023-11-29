@@ -1,7 +1,7 @@
 package dev.xkmc.pandora.content.core;
 
 import dev.xkmc.pandora.content.base.IPandoraHolder;
-import dev.xkmc.pandora.init.data.SlotGen;
+import dev.xkmc.pandora.init.data.PandoraSlotGen;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.EmptyHandler;
@@ -9,14 +9,13 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CombinedStackData {
 
 	private final ICuriosItemHandler parent;
 	private final boolean isCosmetic;
 
-	private List<Supplier<IItemHandlerModifiable>> itemHandler;
+	private List<IPandoraInvGetter> itemHandler;
 	private int[] baseIndex;
 	private int[] forwardMap;
 	private int slotCount;
@@ -28,24 +27,24 @@ public class CombinedStackData {
 
 	private void aggregateCurios(int actualSize) {
 		int totalSize = 0;
-		List<Supplier<IItemHandlerModifiable>> ans = new ArrayList<>();
+		List<IPandoraInvGetter> ans = new ArrayList<>();
 		if (!isCosmetic) {
 			for (var e : parent.getCurios().entrySet()) {
-				if (e.getKey().equals(SlotGen.NAME)) continue;
+				if (e.getKey().equals(PandoraSlotGen.NAME)) continue;
 				var inv = e.getValue().getStacks();
 				for (int i = 0; i < inv.getSlots(); i++) {
 					ItemStack stack = inv.getStackInSlot(i);
 					if (stack.getItem() instanceof IPandoraHolder holder) {
-						Supplier<IItemHandlerModifiable> sup = holder.getSupplier(e.getKey(), i, stack);
+						IPandoraInvGetter sup = holder.getSupplier(e.getKey(), i, stack);
 						ans.add(sup);
-						totalSize += sup.get().getSlots();
+						totalSize += sup.get(parent).getSlots();
 					}
 				}
 			}
 		}
 		if (actualSize < totalSize) {
 			var forbid = new ForbiddenEmptyHandler(totalSize - actualSize);
-			ans.add(() -> forbid);
+			ans.add(c -> forbid);
 		}
 		itemHandler = ans;
 	}
@@ -55,7 +54,7 @@ public class CombinedStackData {
 		baseIndex = new int[itemHandler.size()];
 		int index = 0;
 		for (int i = 0; i < baseIndex.length; i++) {
-			int size = itemHandler.get(i).get().getSlots();
+			int size = itemHandler.get(i).get(parent).getSlots();
 			index += size;
 			baseIndex[i] = index;
 		}
@@ -81,7 +80,7 @@ public class CombinedStackData {
 		if (index < 0 || index >= itemHandler.size()) {
 			return (IItemHandlerModifiable) EmptyHandler.INSTANCE;
 		}
-		return itemHandler.get(index).get();
+		return itemHandler.get(index).get(parent);
 	}
 
 	protected int getSlotFromIndex(int slot, int index) {

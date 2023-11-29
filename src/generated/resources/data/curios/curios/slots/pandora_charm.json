@@ -1,0 +1,11 @@
+{
+  "add_cosmetic": false,
+  "conditions": [],
+  "icon": "pandora:slot/empty_pandora_charm",
+  "operation": "SET",
+  "order": 1000000,
+  "render_toggle": false,
+  "replace": false,
+  "size": 0,
+  "use_native_gui": false
+}

@@ -28,3 +28,8 @@ description='''
     versionRange="[2.4.21,)"
     ordering="AFTER"
     side="BOTH"
+[[dependencies.pandora]]
+    modId="curios"
+    mandatory=true
+    versionRange="[5.3.4,)"
+    side="BOTH"

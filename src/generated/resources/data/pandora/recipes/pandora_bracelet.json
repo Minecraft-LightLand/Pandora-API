@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:gold_ingot"
+    },
+    "C": {
+      "item": "minecraft:chain"
+    }
+  },
+  "pattern": [
+    " C ",
+    "C C",
+    " A "
+  ],
+  "result": {
+    "item": "pandora:pandora_bracelet"
+  },
+  "show_notification": true
+}

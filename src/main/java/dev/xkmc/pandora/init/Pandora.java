@@ -1,8 +1,13 @@
 package dev.xkmc.pandora.init;
 
+import com.tterrag.registrate.providers.ProviderType;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
-import dev.xkmc.pandora.init.data.SlotGen;
+import dev.xkmc.pandora.init.data.PandoraLangData;
+import dev.xkmc.pandora.init.data.PandoraSlotGen;
+import dev.xkmc.pandora.init.data.PandoraTagGen;
+import dev.xkmc.pandora.init.data.RecipeGen;
+import dev.xkmc.pandora.init.registrate.PandoraItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -25,7 +30,11 @@ public class Pandora {
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
 
 	public Pandora() {
+		PandoraItems.register();
 
+		REGISTRATE.addDataGenerator(ProviderType.LANG, PandoraLangData::addTranslations);
+		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, PandoraTagGen::onItemTagGen);
+		REGISTRATE.addDataGenerator(ProviderType.RECIPE, RecipeGen::genRecipe);
 	}
 
 	@SubscribeEvent
@@ -42,7 +51,7 @@ public class Pandora {
 		var pvd = event.getLookupProvider();
 		var helper = event.getExistingFileHelper();
 		var gen = event.getGenerator();
-		gen.addProvider(server, new SlotGen(gen));
+		gen.addProvider(server, new PandoraSlotGen(gen));
 	}
 
 }
