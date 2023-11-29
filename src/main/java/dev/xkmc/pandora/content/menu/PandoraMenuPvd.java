@@ -1,6 +1,6 @@
 package dev.xkmc.pandora.content.menu;
 
-import dev.xkmc.l2tabs.init.data.L2TabsLangData;
+import dev.xkmc.l2tabs.compat.CuriosEventHandler;
 import dev.xkmc.pandora.init.data.PandoraLangData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -33,7 +33,8 @@ public record PandoraMenuPvd(MenuType<PandoraListMenu> type, int page) implement
 	}
 
 	public void open(ServerPlayer player) {
-		NetworkHooks.openScreen(player, this, this::writeBuf);
+		CuriosEventHandler.openMenuWrapped(player, () ->
+				NetworkHooks.openScreen(player, this, this::writeBuf));
 	}
 
 }
