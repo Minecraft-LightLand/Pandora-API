@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[46,)"
+license="All rights reserved"
+[[mods]]
+modId="pandora"
+version="${file.jarVersion}" #mandatory
+displayName="Pandora API" #mandatory
+logoFile="pandora.png" #optional
+credits="Thanks for this example mod goes to Java" #optional
+authors="Love, Cheese and small house plants" #optional
+description='''
+'''
+[[dependencies.pandora]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.pandora]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20,1.21)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.pandora]]
+    modId="l2library"
+    mandatory=true
+    versionRange="[2.4.21,)"
+    ordering="AFTER"
+    side="BOTH"
