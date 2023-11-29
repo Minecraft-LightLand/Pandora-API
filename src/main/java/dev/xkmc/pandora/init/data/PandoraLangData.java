@@ -8,7 +8,9 @@ import net.minecraft.network.chat.MutableComponent;
 import java.util.Locale;
 
 public enum PandoraLangData {
-	TOOLTIP_HOLDER("tooltip.holder", "Holds up to %s Pandora Charms", 1);
+	TOOLTIP_HOLDER("tooltip.holder", "Holds up to %s Pandora Charms", 1),
+	INVALID("menu.invalid", "Invalid", 0),
+	TITLE("menu.title", "Pandora Charms", 0);
 
 	final String id, def;
 	final int count;
@@ -30,6 +32,7 @@ public enum PandoraLangData {
 		for (PandoraLangData id : PandoraLangData.values()) {
 			pvd.add(Pandora.MODID + "." + id.id, id.def);
 		}
+		pvd.add("curios.identifier." + PandoraSlotGen.NAME, "Pandora Charm");
 	}
 
 	public static String asId(String name) {

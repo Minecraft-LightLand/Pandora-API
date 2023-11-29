@@ -1,8 +1,12 @@
 package dev.xkmc.pandora.init;
 
 import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.util.entry.MenuEntry;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
+import dev.xkmc.pandora.content.menu.OpenPandoraPacket;
+import dev.xkmc.pandora.content.menu.PandoraListMenu;
+import dev.xkmc.pandora.content.menu.PandoraListScreen;
 import dev.xkmc.pandora.init.data.PandoraLangData;
 import dev.xkmc.pandora.init.data.PandoraSlotGen;
 import dev.xkmc.pandora.init.data.PandoraTagGen;
@@ -14,6 +18,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.network.NetworkDirection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,10 +29,14 @@ public class Pandora {
 
 	public static final String MODID = "pandora";
 	public static final PacketHandlerWithConfig HANDLER = new PacketHandlerWithConfig(
-			new ResourceLocation(MODID, "main"), 1
+			new ResourceLocation(MODID, "main"), 1,
+			e -> e.create(OpenPandoraPacket.class, NetworkDirection.PLAY_TO_SERVER)
 	);
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
+
+	public static final MenuEntry<PandoraListMenu> LIST_MENU = REGISTRATE.menu("pandora_list",
+			PandoraListMenu::fromNetwork, () -> PandoraListScreen::new).register();
 
 	public Pandora() {
 		PandoraItems.register();

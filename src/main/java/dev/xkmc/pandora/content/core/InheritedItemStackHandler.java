@@ -6,6 +6,8 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
+import java.util.List;
+
 public class InheritedItemStackHandler implements IItemHandler, IItemHandlerModifiable {
 
 	private final CombinedStackData data;
@@ -88,4 +90,7 @@ public class InheritedItemStackHandler implements IItemHandler, IItemHandlerModi
 		return handler.isItemValid(localSlot, stack);
 	}
 
+	public List<IPandoraInv> getSplitSlots() {
+		return data.getSplitSlots();
+	}
 }

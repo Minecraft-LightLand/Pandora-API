@@ -1,7 +1,12 @@
 package dev.xkmc.pandora.content.base;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import dev.xkmc.pandora.init.data.PandoraSlotGen;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -11,15 +16,18 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.CuriosCapability;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import java.util.List;
+import java.util.UUID;
 
-public class BasePandoraInvWrapper implements IItemHandlerModifiable, ICapabilityProvider {
+public class BasePandoraInvWrapper implements IItemHandlerModifiable {
 
 	private final ItemStack stack;
 	private final IPandoraHolder bag;
-	private final LazyOptional<BasePandoraInvWrapper> holder = LazyOptional.of(() -> this);
-
 	private ListTag cachedTag;
 	private List<ItemStack> itemStacksCache;
 
@@ -160,15 +168,6 @@ public class BasePandoraInvWrapper implements IItemHandlerModifiable, ICapabilit
 		IPandoraHolder.setItems(stack, itemStacks);
 		cachedTag = IPandoraHolder.getListTag(stack);
 		itemStacksCache = null;
-	}
-
-	@Override
-	@NotNull
-	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		if (cap == ForgeCapabilities.ITEM_HANDLER) {
-			return holder.cast();
-		}
-		return LazyOptional.empty();
 	}
 
 }

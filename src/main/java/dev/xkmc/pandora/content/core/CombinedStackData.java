@@ -37,14 +37,14 @@ public class CombinedStackData {
 					if (stack.getItem() instanceof IPandoraHolder holder) {
 						IPandoraInvGetter sup = holder.getSupplier(e.getKey(), i, stack);
 						ans.add(sup);
-						totalSize += sup.get(parent).getSlots();
+						totalSize += sup.get(parent).handler().getSlots();
 					}
 				}
 			}
 		}
 		if (actualSize < totalSize) {
 			var forbid = new ForbiddenEmptyHandler(totalSize - actualSize);
-			ans.add(c -> forbid);
+			ans.add(c -> new ForbidInv(forbid));
 		}
 		itemHandler = ans;
 	}
@@ -54,7 +54,7 @@ public class CombinedStackData {
 		baseIndex = new int[itemHandler.size()];
 		int index = 0;
 		for (int i = 0; i < baseIndex.length; i++) {
-			int size = itemHandler.get(i).get(parent).getSlots();
+			int size = itemHandler.get(i).get(parent).handler().getSlots();
 			index += size;
 			baseIndex[i] = index;
 		}
@@ -80,7 +80,7 @@ public class CombinedStackData {
 		if (index < 0 || index >= itemHandler.size()) {
 			return (IItemHandlerModifiable) EmptyHandler.INSTANCE;
 		}
-		return itemHandler.get(index).get(parent);
+		return itemHandler.get(index).get(parent).handler();
 	}
 
 	protected int getSlotFromIndex(int slot, int index) {
@@ -92,6 +92,10 @@ public class CombinedStackData {
 
 	protected int getSlotCount() {
 		return slotCount;
+	}
+
+	public List<IPandoraInv> getSplitSlots() {
+		return itemHandler.stream().map(e -> e.get(parent)).toList();
 	}
 
 }

@@ -1,6 +1,8 @@
 package dev.xkmc.pandora.content.base;
 
 import dev.xkmc.pandora.content.core.IPandoraInvGetter;
+import dev.xkmc.pandora.content.core.PandoraInfo;
+import dev.xkmc.pandora.content.core.PandoraInvGetter;
 import dev.xkmc.pandora.init.data.PandoraTagGen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -55,7 +57,7 @@ public interface IPandoraHolder {
 	}
 
 	default IPandoraInvGetter getSupplier(String key, int i, ItemStack stack) {
-		return new PandoraInvGetter(key, i, getSlots(stack));
+		return new PandoraInvGetter(key, i, new PandoraInfo(stack.getHoverName(), getSlots(stack)));
 	}
 
 	int getSlots(ItemStack stack);
