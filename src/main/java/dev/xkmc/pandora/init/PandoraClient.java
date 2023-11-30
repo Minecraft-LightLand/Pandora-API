@@ -4,7 +4,7 @@ import dev.xkmc.l2tabs.tabs.core.TabRegistry;
 import dev.xkmc.l2tabs.tabs.core.TabToken;
 import dev.xkmc.pandora.content.base.InvClientTooltip;
 import dev.xkmc.pandora.content.base.InvTooltip;
-import dev.xkmc.pandora.content.menu.TabPandora;
+import dev.xkmc.pandora.content.menu.tab.TabPandora;
 import dev.xkmc.pandora.init.data.PandoraLangData;
 import dev.xkmc.pandora.init.registrate.PandoraItems;
 import net.minecraftforge.api.distmarker.Dist;

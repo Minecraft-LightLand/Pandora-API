@@ -1,4 +1,4 @@
-package dev.xkmc.pandora.content.menu;
+package dev.xkmc.pandora.content.menu.tab;
 
 import dev.xkmc.l2tabs.compat.BaseCuriosWrapper;
 import dev.xkmc.l2tabs.compat.CuriosSlotWrapper;
@@ -19,7 +19,7 @@ public class PandoraWrapper extends BaseCuriosWrapper {
 
 	public final ArrayList<TitleLine> titles = new ArrayList<>();
 
-	private int row;
+	private int row, actualSize;
 
 	public PandoraWrapper(LivingEntity player, int page) {
 		super(player);
@@ -31,12 +31,13 @@ public class PandoraWrapper extends BaseCuriosWrapper {
 			return;
 		}
 		var cap = opt.get().getCurios().get(PandoraSlotGen.NAME);
-		if (!(cap.getStacks() instanceof PandoraDynamicStackHandler pandora))
+		if (cap == null || !(cap.getStacks() instanceof PandoraDynamicStackHandler pandora))
 			return;
 		var invs = pandora.getSplitSlots();
 		int pageIndex = 0;
 		int rowIndex = 0;
 		int slotIndex = 0;
+		actualSize = 0;
 		for (var e : invs) {
 			int size = (e.getSlots() + 8) / 9 + 1;
 			if (size > 1) {
@@ -51,6 +52,7 @@ public class PandoraWrapper extends BaseCuriosWrapper {
 					}
 					for (int i = 0; i < e.getSlots(); i++) {
 						list.add(new CuriosSlotWrapper(player, cap, slotIndex + i, PandoraSlotGen.NAME));
+						actualSize++;
 					}
 					while (list.size() % 9 != 0) {
 						list.add(null);
@@ -70,7 +72,7 @@ public class PandoraWrapper extends BaseCuriosWrapper {
 	}
 
 	public int getSize() {
-		return list.size();
+		return actualSize;
 	}
 
 	public CuriosSlotWrapper get(int i) {

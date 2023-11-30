@@ -1,5 +1,6 @@
 package dev.xkmc.pandora.content.base;
 
+import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import dev.xkmc.pandora.content.core.IPandoraInvGetter;
 import dev.xkmc.pandora.content.core.PandoraInfo;
 import dev.xkmc.pandora.content.core.PandoraInvGetter;
@@ -7,6 +8,7 @@ import dev.xkmc.pandora.init.data.PandoraTagGen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -69,5 +71,7 @@ public interface IPandoraHolder {
 	default Optional<IItemHandlerModifiable> getCap(ItemStack stack) {
 		return stack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().map(e -> e instanceof IItemHandlerModifiable mod ? mod : null);
 	}
+
+	void open(ServerPlayer player, PlayerSlot<?> slot, ItemStack stack);
 
 }

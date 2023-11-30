@@ -1,9 +1,12 @@
 package dev.xkmc.pandora.content.base;
 
+import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
+import dev.xkmc.pandora.content.menu.edit.PandoraEditPvd;
 import dev.xkmc.pandora.init.data.PandoraLangData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +45,11 @@ public class PandoraHolder extends Item implements IPandoraHolder {
 	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		return new BasePandoraInvWrapper(stack);
+	}
+
+	@Override
+	public void open(ServerPlayer player, PlayerSlot<?> slot, ItemStack stack) {
+		new PandoraEditPvd(player, slot, stack).open();
 	}
 
 }

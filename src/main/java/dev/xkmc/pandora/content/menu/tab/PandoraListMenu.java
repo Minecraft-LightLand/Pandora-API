@@ -1,7 +1,8 @@
-package dev.xkmc.pandora.content.menu;
+package dev.xkmc.pandora.content.menu.tab;
 
 import dev.xkmc.l2tabs.compat.BaseCuriosListMenu;
 import dev.xkmc.pandora.init.Pandora;
+import dev.xkmc.pandora.init.registrate.PandoraMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,6 +20,6 @@ public class PandoraListMenu extends BaseCuriosListMenu<PandoraListMenu> {
 
 	@Override
 	public void switchPage(ServerPlayer sp, int page) {
-		new PandoraMenuPvd(Pandora.LIST_MENU.get(), page).open(sp);
+		new PandoraMenuPvd(PandoraMenus.LIST_MENU.get(), page).open(sp);
 	}
 }

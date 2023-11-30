@@ -1,4 +1,4 @@
-package dev.xkmc.pandora.content.menu;
+package dev.xkmc.pandora.content.menu.tab;
 
 import dev.xkmc.l2tabs.compat.CuriosEventHandler;
 import dev.xkmc.pandora.init.data.PandoraLangData;
