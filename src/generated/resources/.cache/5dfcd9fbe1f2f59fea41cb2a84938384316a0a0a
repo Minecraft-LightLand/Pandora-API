@@ -1,12 +1,11 @@
-// 1.20.1	2023-11-29T15:27:04.230939	Registrate Provider for pandora [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud), Tags (mob_effects), Tags (enchantments), Tags (traits), Patchouli Provider]
+// 1.20.1	2023-12-04T10:09:59.692998	Registrate Provider for pandora [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud), Tags (mob_effects), Tags (enchantments), Tags (traits), Patchouli Provider]
 f14a867a9278861d00c36fb64aed5716b9ccb682 assets/pandora/lang/en_ud.json
 e72cfb1c36b35cf9bbbdf606f6a8ae96c00896d0 assets/pandora/lang/en_us.json
 21f0534c42d082c2583c29a6a2734b969e123342 assets/pandora/models/item/pandora_bracelet.json
 3f4a7ff6fcdda14fb239d354e50beb068724a485 assets/pandora/models/item/pandora_necklace.json
 874dae58646390446bd583eb1bbdc7f5ef161639 data/curios/tags/items/bracelet.json
 1f417a4628d47deebde33d670f95ed9b399a81fa data/curios/tags/items/necklace.json
-ddf79926681ba5b3b59196c31301881bb51cbc9c data/curios/tags/items/pandora_charm.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/curios/tags/items/ring.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/curios/tags/items/pandora_charm.json
 04afdf0173539b6784462b21b991a262d8aa0d4c data/l2hostility/tags/items/no_seal.json
 d0d6b5cfdcfa7149af89aa2845d18cff854d1de5 data/pandora/advancements/recipes/misc/pandora_bracelet.json
 e79652d42956506e8724aa03e2c6c2ac2641311d data/pandora/advancements/recipes/misc/pandora_necklace.json

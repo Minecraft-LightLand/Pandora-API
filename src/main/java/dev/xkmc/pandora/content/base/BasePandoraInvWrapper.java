@@ -3,10 +3,12 @@ package dev.xkmc.pandora.content.base;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import dev.xkmc.pandora.init.data.PandoraSlotGen;
+import dev.xkmc.pandora.init.data.PandoraTagGen;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -21,7 +23,9 @@ import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class BasePandoraInvWrapper implements IItemHandlerModifiable, ICurio, ICapabilityProvider {
@@ -142,7 +146,18 @@ public class BasePandoraInvWrapper implements IItemHandlerModifiable, ICurio, IC
 
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
-		return stack.isEmpty() || item.isItemValid(slot, stack);
+		return stack.isEmpty() || item.isItemValid(slot, stack) &&
+				(stack.is(PandoraTagGen.ALLOW_DUPLICATE) || !getItemSet(slot).contains(stack.getItem()));
+	}
+
+	public Set<Item> getItemSet(int ignoreSlot) {
+		Set<Item> set = new HashSet<>();
+		var list = getItemList();
+		for (int i = 0; i < list.size(); i++) {
+			if (i != ignoreSlot)
+				set.add(list.get(i).getItem());
+		}
+		return set;
 	}
 
 	@Override
