@@ -9,7 +9,7 @@ import java.util.Optional;
 public record InvTooltip(IPandoraHolder item, ItemStack stack) implements TooltipComponent {
 
 	public static Optional<TooltipComponent> get(IPandoraHolder item, ItemStack stack) {
-		if (Screen.hasShiftDown()) {
+		if (!Screen.hasShiftDown()) {
 			return Optional.empty();
 		}
 		var list = IPandoraHolder.getListTag(stack);

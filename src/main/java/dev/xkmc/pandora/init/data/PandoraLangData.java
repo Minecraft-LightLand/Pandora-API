@@ -9,6 +9,7 @@ import java.util.Locale;
 
 public enum PandoraLangData {
 	TOOLTIP_HOLDER("tooltip.holder", "Holds up to %s Pandora Charms", 1),
+	TOOLTIP_DUPLICATE("tooltip.duplicate", "You may have multiple of this charm in one Pandora", 0),
 	INVALID("menu.invalid", "Invalid", 0),
 	TITLE("menu.title", "Pandora Charms", 0);
 
@@ -33,6 +34,7 @@ public enum PandoraLangData {
 			pvd.add(Pandora.MODID + "." + id.id, id.def);
 		}
 		pvd.add("curios.identifier." + PandoraSlotGen.NAME, "Pandora Charm");
+		pvd.add("curios.modifiers." + PandoraSlotGen.NAME, "When on Pandora curio:");
 	}
 
 	public static String asId(String name) {

@@ -1,9 +1,11 @@
 {
   "curios.identifier.pandora_charm": "ɯɹɐɥƆ ɐɹopuɐԀ",
+  "curios.modifiers.pandora_charm": ":oıɹnɔ ɐɹopuɐԀ uo uǝɥM",
   "item.pandora.pandora_bracelet": "ʇǝןǝɔɐɹᗺ ɐɹopuɐԀ",
   "item.pandora.pandora_necklace": "ǝɔɐןʞɔǝN ɐɹopuɐԀ",
   "itemGroup.l2library.pandora": "ɐɹopuɐԀ",
   "pandora.menu.invalid": "pıןɐʌuI",
   "pandora.menu.title": "sɯɹɐɥƆ ɐɹopuɐԀ",
+  "pandora.tooltip.duplicate": "ɐɹopuɐԀ ǝuo uı ɯɹɐɥɔ sıɥʇ ɟo ǝןdıʇןnɯ ǝʌɐɥ ʎɐɯ noʎ",
   "pandora.tooltip.holder": "sɯɹɐɥƆ ɐɹopuɐԀ %s oʇ dn spןoH"
 }

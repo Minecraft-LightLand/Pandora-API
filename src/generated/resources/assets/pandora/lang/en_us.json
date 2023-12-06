@@ -1,9 +1,11 @@
 {
   "curios.identifier.pandora_charm": "Pandora Charm",
+  "curios.modifiers.pandora_charm": "When on Pandora curio:",
   "item.pandora.pandora_bracelet": "Pandora Bracelet",
   "item.pandora.pandora_necklace": "Pandora Necklace",
   "itemGroup.l2library.pandora": "Pandora",
   "pandora.menu.invalid": "Invalid",
   "pandora.menu.title": "Pandora Charms",
+  "pandora.tooltip.duplicate": "You may have multiple of this charm in one Pandora",
   "pandora.tooltip.holder": "Holds up to %s Pandora Charms"
 }
