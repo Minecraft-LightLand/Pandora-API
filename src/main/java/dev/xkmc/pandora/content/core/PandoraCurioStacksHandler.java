@@ -533,6 +533,9 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 		if (this.itemHandler == null) {
 			return;
 		}
+
+		PandoraUpdateHandler.update(itemHandler.getWearer(), itemHandler, this, identifier);
+
 		List<ItemStack> drops = new ArrayList<>();
 
 		for (int i = Math.max(0, stackHandler.getSlots() - amount);

@@ -30,7 +30,10 @@ public class InheritedItemStackHandler implements IItemHandler, IItemHandlerModi
 	}
 
 	protected void onContentsChanged(int slot) {
-
+		int index = data.getIndexForSlot(slot);
+		IItemHandlerModifiable handler = data.getHandlerFromIndex(index);
+		slot = data.getSlotFromIndex(slot, index);
+		handler.setStackInSlot(slot, handler.getStackInSlot(slot));
 	}
 
 
