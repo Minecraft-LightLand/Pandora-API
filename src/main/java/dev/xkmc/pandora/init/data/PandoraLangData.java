@@ -9,6 +9,7 @@ import java.util.Locale;
 
 public enum PandoraLangData {
 	TOOLTIP_HOLDER("tooltip.holder", "Holds up to %s Pandora Charms", 1),
+	TOOLTIP_CONTAIN("tooltip.contain", "Contains %s charms", 1),
 	TOOLTIP_DUPLICATE("tooltip.duplicate", "You may have multiple of this charm in one Pandora", 0),
 	INVALID("menu.invalid", "Invalid", 0),
 	TITLE("menu.title", "Pandora Charms", 0);

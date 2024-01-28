@@ -6,6 +6,7 @@
   "itemGroup.l2library.pandora": "Pandora",
   "pandora.menu.invalid": "Invalid",
   "pandora.menu.title": "Pandora Charms",
+  "pandora.tooltip.contain": "Contains %s charms",
   "pandora.tooltip.duplicate": "You may have multiple of this charm in one Pandora",
   "pandora.tooltip.holder": "Holds up to %s Pandora Charms"
 }

@@ -3,6 +3,7 @@ package dev.xkmc.pandora.content.menu.tab;
 import dev.xkmc.l2tabs.compat.BaseCuriosWrapper;
 import dev.xkmc.l2tabs.compat.CuriosSlotWrapper;
 import dev.xkmc.pandora.content.core.PandoraDynamicStackHandler;
+import dev.xkmc.pandora.init.data.PandoraConfig;
 import dev.xkmc.pandora.init.data.PandoraSlotGen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,15 +40,17 @@ public class PandoraWrapper extends BaseCuriosWrapper {
 		int slotIndex = 0;
 		actualSize = 0;
 		for (var e : invs) {
-			int size = (e.getSlots() + 8) / 9 + 1;
+			int size = (e.getSlots() + 8) / 9 + (PandoraConfig.COMMON.showItemTitle.get() ? 1 : 0);
 			if (size > 1) {
 				if (rowIndex > 0 && rowIndex + size > max) {
 					rowIndex = 0;
 					pageIndex++;
 				}
 				if (pageIndex == page) {
-					for (int i = 0; i < 9; i++) {
-						list.add(null);
+					if (PandoraConfig.COMMON.showItemTitle.get()) {
+						for (int i = 0; i < 9; i++) {
+							list.add(null);
+						}
 						titles.add(new TitleLine(rowIndex, e.getTitle()));
 					}
 					for (int i = 0; i < e.getSlots(); i++) {

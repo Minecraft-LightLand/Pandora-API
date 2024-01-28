@@ -1,6 +1,6 @@
-// 1.20.1	2023-12-05T15:41:10.424226	Registrate Provider for pandora [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud), Tags (mob_effects), Tags (enchantments), Tags (traits), Patchouli Provider]
-3e8d1bf01c29af790091b78692dfcdb7fd9583f9 assets/pandora/lang/en_ud.json
-1cf5204f92fd72ec750b1046d81c5a434c49ed0a assets/pandora/lang/en_us.json
+// 1.20.1	2024-01-28T00:52:28.253117	Registrate Provider for pandora [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud), Tags (mob_effects), Tags (enchantments), Tags (traits), Patchouli Provider]
+b917273a5152ee768d1fd7f5cd8d9e75f3694cb2 assets/pandora/lang/en_ud.json
+43f9a5c4f3c1f3af530d6e483940445c222e314b assets/pandora/lang/en_us.json
 21f0534c42d082c2583c29a6a2734b969e123342 assets/pandora/models/item/pandora_bracelet.json
 3f4a7ff6fcdda14fb239d354e50beb068724a485 assets/pandora/models/item/pandora_necklace.json
 874dae58646390446bd583eb1bbdc7f5ef161639 data/curios/tags/items/bracelet.json

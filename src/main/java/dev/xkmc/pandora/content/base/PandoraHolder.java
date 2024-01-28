@@ -4,6 +4,7 @@ import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import dev.xkmc.pandora.content.menu.edit.PandoraEditPvd;
 import dev.xkmc.pandora.init.data.PandoraLangData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,6 +41,16 @@ public class PandoraHolder extends Item implements IPandoraHolder {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
 		list.add(PandoraLangData.TOOLTIP_HOLDER.get(getSlots(stack)).withStyle(ChatFormatting.GRAY));
+		if (!Screen.hasShiftDown()) {
+			if (IPandoraHolder.getListTag(stack).isEmpty()) return;
+			int count = 0;
+			for (var e : IPandoraHolder.getItems(stack)) {
+				if (!e.isEmpty()) count++;
+			}
+			if (count > 0) {
+				list.add(PandoraLangData.TOOLTIP_CONTAIN.get(count).withStyle(ChatFormatting.DARK_AQUA));
+			}
+		}
 	}
 
 	@Override

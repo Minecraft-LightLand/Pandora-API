@@ -16,8 +16,12 @@ public class PandoraConfig {
 	}
 
 	public static class Common {
-		
+
+		public final ForgeConfigSpec.BooleanValue showItemTitle;
+
 		Common(ForgeConfigSpec.Builder builder) {
+			showItemTitle = builder.comment("Show holder item name in pandora tab")
+					.define("showItemTitle", false);
 		}
 
 	}

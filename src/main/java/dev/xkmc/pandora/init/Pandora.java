@@ -5,10 +5,7 @@ import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.pandora.content.menu.tab.OpenPandoraPacket;
 import dev.xkmc.pandora.event.PandoraSlotClickListener;
-import dev.xkmc.pandora.init.data.PandoraLangData;
-import dev.xkmc.pandora.init.data.PandoraSlotGen;
-import dev.xkmc.pandora.init.data.PandoraTagGen;
-import dev.xkmc.pandora.init.data.RecipeGen;
+import dev.xkmc.pandora.init.data.*;
 import dev.xkmc.pandora.init.registrate.PandoraItems;
 import dev.xkmc.pandora.init.registrate.PandoraMenus;
 import net.minecraft.data.PackOutput;
@@ -39,6 +36,7 @@ public class Pandora {
 	public Pandora() {
 		PandoraItems.register();
 		PandoraMenus.register();
+		PandoraConfig.init();
 
 		REGISTRATE.addDataGenerator(ProviderType.LANG, PandoraLangData::addTranslations);
 		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, PandoraTagGen::onItemTagGen);
