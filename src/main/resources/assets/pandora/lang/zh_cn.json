@@ -8,5 +8,6 @@
   "pandora.menu.invalid": "已移除栏位",
   "pandora.menu.title": "潘多拉串饰",
   "curios.modifiers.pandora_charm": "作为潘多拉串饰时：",
-  "pandora.tooltip.duplicate": "你可以在一个潘多拉饰品中装载复数此串饰"
+  "pandora.tooltip.duplicate": "你可以在一个潘多拉饰品中装载复数此串饰",
+  "pandora.tooltip.shift": "按SHIFT显示内容物，右键物品编辑内容"
 }

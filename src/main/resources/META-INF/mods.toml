@@ -31,5 +31,5 @@ description='''
 [[dependencies.pandora]]
     modId="curios"
     mandatory=true
-    versionRange="[5.3.4,)"
+    versionRange="[5.4.5,)"
     side="BOTH"

@@ -41,7 +41,7 @@ public class PandoraWrapper extends BaseCuriosWrapper {
 		actualSize = 0;
 		for (var e : invs) {
 			int size = (e.getSlots() + 8) / 9 + (PandoraConfig.COMMON.showItemTitle.get() ? 1 : 0);
-			if (size > 1) {
+			if (e.getSlots() > 0) {
 				if (rowIndex > 0 && rowIndex + size > max) {
 					rowIndex = 0;
 					pageIndex++;
