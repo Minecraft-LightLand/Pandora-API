@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "pandora.refmap.json",
   "mixins": [
-	"CurioInventoryWrapperMixin"
+	"CurioInventoryWrapperMixin",
+	"SPacketSyncModifiersMixin"
   ],
   "client": [
   ],

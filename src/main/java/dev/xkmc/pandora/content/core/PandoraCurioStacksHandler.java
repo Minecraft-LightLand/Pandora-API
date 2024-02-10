@@ -506,7 +506,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 
 			if (currentSize > newSize) {
 				change = change * -1;
-				this.loseStacks(this.stackHandler, identifier, change);
+				//this.loseStacks(this.stackHandler, identifier, change);
 				this.stackHandler.shrink(change);
 				this.cosmeticStackHandler.shrink(change);
 				NonNullList<Boolean> newList = NonNullList.withSize(Math.max(0, newSize), true);

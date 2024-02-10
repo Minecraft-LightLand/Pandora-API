@@ -21,7 +21,7 @@ public record PandoraInvGetter(String id, int slot, PandoraInfo info) implements
 					}
 				}
 			}
-		}
+		}//TODO
 		return new ForbidInv(new ForbiddenEmptyHandler(info.size()));
 	}
 
