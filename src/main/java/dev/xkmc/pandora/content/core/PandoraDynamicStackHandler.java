@@ -45,11 +45,11 @@ public class PandoraDynamicStackHandler extends InheritedItemStackHandler implem
 	@SuppressWarnings("ConstantConditions")
 	@Override
 	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+		if (slot < 0 || slot >= getSlots()) return false;
 		SlotContext ctx = ctxBuilder.apply(slot);
 		CurioEquipEvent equipEvent = new CurioEquipEvent(stack, ctx);
 		MinecraftForge.EVENT_BUS.post(equipEvent);
 		Event.Result result = equipEvent.getResult();
-
 		if (result == Event.Result.DENY) {
 			return false;
 		}

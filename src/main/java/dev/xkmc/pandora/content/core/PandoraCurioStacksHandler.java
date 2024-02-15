@@ -63,11 +63,9 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 		this.dropRule = dropRule;
 		this.renderHandler = NonNullList.withSize(size, true);
 		this.stackHandler = new PandoraDynamicStackHandler(itemHandler, size, false,
-				(index) -> new SlotContext(identifier, itemHandler.getWearer(), index, false,
-						this.getRenders().get(index)));
+				(index) -> new SlotContext(identifier, itemHandler.getWearer(), index, false, false));
 		this.cosmeticStackHandler = new PandoraDynamicStackHandler(itemHandler, size, true,
-				(index) -> new SlotContext(identifier, itemHandler.getWearer(), index, true,
-						this.getRenders().get(index)));
+				(index) -> new SlotContext(identifier, itemHandler.getWearer(), index, true, false));
 	}
 
 	@Override
