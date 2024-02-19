@@ -48,7 +48,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 	private NonNullList<Boolean> renderHandler;
 
 	public PandoraCurioStacksHandler(ICuriosItemHandler itemHandler, String identifier) {
-		this(itemHandler, identifier, 1, false, false, false, ICurio.DropRule.DEFAULT);
+		this(itemHandler, identifier, 0, false, false, false, ICurio.DropRule.DEFAULT);
 	}
 
 	public PandoraCurioStacksHandler(ICuriosItemHandler itemHandler, String identifier, int size,
@@ -287,13 +287,8 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 		for (int i = 0; i < this.renderHandler.size(); i++) {
 			CompoundTag tag = new CompoundTag();
 			tag.putInt("Slot", i);
-			tag.putBoolean("Render", this.renderHandler.get(i));
 			nbtTagList.add(tag);
 		}
-		CompoundTag nbt = new CompoundTag();
-		nbt.put("Renders", nbtTagList);
-		nbt.putInt("Size", this.renderHandler.size());
-		compoundNBT.put("Renders", nbt);
 		compoundNBT.putBoolean("HasCosmetic", this.cosmetic);
 		compoundNBT.putBoolean("Visible", this.visible);
 		compoundNBT.putBoolean("RenderToggle", this.canToggleRender);
@@ -325,22 +320,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 			this.cosmeticStackHandler.deserializeNBT(tag.getCompound("Cosmetics"));
 		}
 
-		if (tag.contains("Renders")) {
-			CompoundTag compoundNBT = tag.getCompound("Renders");
-			this.renderHandler = NonNullList.withSize(
-					compoundNBT.contains("Size", Tag.TAG_INT) ? compoundNBT.getInt("Size") :
-							this.stackHandler.getSlots(), true);
-			ListTag tagList = compoundNBT.getList("Renders", Tag.TAG_COMPOUND);
-
-			for (int i = 0; i < tagList.size(); i++) {
-				CompoundTag tags = tagList.getCompound(i);
-				int slot = tags.getInt("Slot");
-
-				if (slot >= 0 && slot < this.renderHandler.size()) {
-					this.renderHandler.set(slot, tags.getBoolean("Render"));
-				}
-			}
-		}
+		renderHandler = NonNullList.withSize(stackHandler.getSlots(), true);
 
 		if (tag.contains("SizeShift")) {
 			int sizeShift = tag.getInt("SizeShift");
@@ -507,22 +487,11 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 				//this.loseStacks(this.stackHandler, identifier, change);
 				this.stackHandler.shrink(change);
 				this.cosmeticStackHandler.shrink(change);
-				NonNullList<Boolean> newList = NonNullList.withSize(Math.max(0, newSize), true);
-
-				for (int i = 0; i < newList.size() && i < this.renderHandler.size(); i++) {
-					newList.set(i, renderHandler.get(i));
-				}
-				this.renderHandler = newList;
 			} else {
 				this.stackHandler.grow(change);
 				this.cosmeticStackHandler.grow(change);
-				NonNullList<Boolean> newList = NonNullList.withSize(Math.max(0, newSize), true);
-
-				for (int i = 0; i < newList.size() && i < this.renderHandler.size(); i++) {
-					newList.set(i, renderHandler.get(i));
-				}
-				this.renderHandler = newList;
 			}
+			renderHandler = NonNullList.withSize(newSize, true);
 		}
 	}
 

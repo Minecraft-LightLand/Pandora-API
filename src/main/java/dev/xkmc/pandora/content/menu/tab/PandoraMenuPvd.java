@@ -25,7 +25,7 @@ public record PandoraMenuPvd(MenuType<PandoraListMenu> type, int page) implement
 
 	@Override
 	public AbstractContainerMenu createMenu(int wid, Inventory inv, Player player) {
-		return new PandoraListMenu(type, wid, inv, new PandoraWrapper(player, page));
+		return new PandoraListMenu(type, wid, inv, PandoraWrapper.of(player, page));
 	}
 
 	public void writeBuf(FriendlyByteBuf buf) {

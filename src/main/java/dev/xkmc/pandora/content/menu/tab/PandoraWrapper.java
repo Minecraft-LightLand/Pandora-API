@@ -3,6 +3,7 @@ package dev.xkmc.pandora.content.menu.tab;
 import dev.xkmc.l2tabs.compat.BaseCuriosWrapper;
 import dev.xkmc.l2tabs.compat.CuriosSlotWrapper;
 import dev.xkmc.pandora.content.core.PandoraDynamicStackHandler;
+import dev.xkmc.pandora.init.Pandora;
 import dev.xkmc.pandora.init.data.PandoraConfig;
 import dev.xkmc.pandora.init.data.PandoraSlotGen;
 import net.minecraft.network.chat.Component;
@@ -16,13 +17,17 @@ import java.util.Optional;
 
 public class PandoraWrapper extends BaseCuriosWrapper {
 
+	public static PandoraWrapper of(LivingEntity player, int page) {
+		return new PandoraWrapper(player, page);
+	}
+
 	private final ArrayList<CuriosSlotWrapper> list = new ArrayList<>();
 
 	public final ArrayList<TitleLine> titles = new ArrayList<>();
 
 	private int row, actualSize;
 
-	public PandoraWrapper(LivingEntity player, int page) {
+	private PandoraWrapper(LivingEntity player, int page) {
 		super(player);
 		int max = 6;
 		Optional<ICuriosItemHandler> opt = player.getCapability(CuriosCapability.INVENTORY).resolve();
