@@ -31,8 +31,7 @@ public class CurioInventoryWrapperMixin {
 		var e = curios.get(id);
 		if (e == null) return;
 		ICuriosItemHandler self = Wrappers.cast(this);
-		curios.put(id, new PandoraCurioStacksHandler(self, id, 0,
-				false, false, false, e.getDropRule()));
+		curios.put(id, new PandoraCurioStacksHandler(self, id, e.getDropRule()).from(e));
 	}
 
 }

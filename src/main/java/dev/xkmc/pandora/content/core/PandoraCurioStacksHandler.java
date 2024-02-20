@@ -37,35 +37,24 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 	private final Multimap<AttributeModifier.Operation, AttributeModifier> modifiersByOperation =
 			HashMultimap.create();
 
-	private int baseSize;
-	private IDynamicStackHandler stackHandler;
-	private IDynamicStackHandler cosmeticStackHandler;
-	private boolean visible;
-	private boolean cosmetic;
-	private boolean canToggleRender;
+	private IDynamicStackHandler stackHandler, cosmeticHandler;
 	private ICurio.DropRule dropRule;
 	private boolean update;
 	private NonNullList<Boolean> renderHandler;
 
 	public PandoraCurioStacksHandler(ICuriosItemHandler itemHandler, String identifier) {
-		this(itemHandler, identifier, 0, false, false, false, ICurio.DropRule.DEFAULT);
+		this(itemHandler, identifier, ICurio.DropRule.DEFAULT);
 	}
 
-	public PandoraCurioStacksHandler(ICuriosItemHandler itemHandler, String identifier, int size,
-									 boolean visible, boolean cosmetic, boolean canToggleRender,
-									 ICurio.DropRule dropRule) {
-		this.baseSize = size;
-		this.visible = visible;
-		this.cosmetic = cosmetic;
+	public PandoraCurioStacksHandler(ICuriosItemHandler itemHandler, String identifier, ICurio.DropRule dropRule) {
+
 		this.itemHandler = itemHandler;
 		this.identifier = identifier;
-		this.canToggleRender = canToggleRender;
 		this.dropRule = dropRule;
-		this.renderHandler = NonNullList.withSize(size, true);
-		this.stackHandler = new PandoraDynamicStackHandler(itemHandler, size, false,
+		this.renderHandler = NonNullList.withSize(0, false);
+		this.stackHandler = new PandoraDynamicStackHandler(itemHandler, 0, false,
 				(index) -> new SlotContext(identifier, itemHandler.getWearer(), index, false, false));
-		this.cosmeticStackHandler = new PandoraDynamicStackHandler(itemHandler, size, true,
-				(index) -> new SlotContext(identifier, itemHandler.getWearer(), index, true, false));
+		this.cosmeticHandler = new EmptyDynamicStackHandler(0);
 	}
 
 	@Override
@@ -77,7 +66,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 	@Override
 	public IDynamicStackHandler getCosmeticStacks() {
 		this.update();
-		return this.cosmeticStackHandler;
+		return cosmeticHandler;
 	}
 
 	@Override
@@ -88,7 +77,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 
 	@Override
 	public boolean canToggleRendering() {
-		return this.canToggleRender;
+		return false;
 	}
 
 	@Override
@@ -109,12 +98,12 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 
 	@Override
 	public boolean isVisible() {
-		return this.visible;
+		return false;
 	}
 
 	@Override
 	public boolean hasCosmetic() {
-		return this.cosmetic;
+		return false;
 	}
 
 	@Override
@@ -154,25 +143,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 	@Override
 	public CompoundTag serializeNBT() {
 		CompoundTag compoundNBT = new CompoundTag();
-		compoundNBT.putInt("SavedBaseSize", this.baseSize);
 		compoundNBT.put("Stacks", this.stackHandler.serializeNBT());
-		compoundNBT.put("Cosmetics", this.cosmeticStackHandler.serializeNBT());
-
-		ListTag nbtTagList = new ListTag();
-
-		for (int i = 0; i < this.renderHandler.size(); i++) {
-			CompoundTag tag = new CompoundTag();
-			tag.putInt("Slot", i);
-			tag.putBoolean("Render", this.renderHandler.get(i));
-			nbtTagList.add(tag);
-		}
-		CompoundTag nbt = new CompoundTag();
-		nbt.put("Renders", nbtTagList);
-		nbt.putInt("Size", this.renderHandler.size());
-		compoundNBT.put("Renders", nbt);
-		compoundNBT.putBoolean("HasCosmetic", this.cosmetic);
-		compoundNBT.putBoolean("Visible", this.visible);
-		compoundNBT.putBoolean("RenderToggle", this.canToggleRender);
 		compoundNBT.putString("DropRule", this.dropRule.toString());
 
 		if (!this.persistentModifiers.isEmpty()) {
@@ -198,48 +169,9 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
-
-		if (nbt.contains("SavedBaseSize")) {
-			this.baseSize = nbt.getInt("SavedBaseSize");
-		}
-
 		if (nbt.contains("Stacks")) {
 			this.stackHandler.deserializeNBT(nbt.getCompound("Stacks"));
 		}
-
-		if (nbt.contains("Cosmetics")) {
-			this.cosmeticStackHandler.deserializeNBT(nbt.getCompound("Cosmetics"));
-		}
-
-		if (nbt.contains("Renders")) {
-			CompoundTag tag = nbt.getCompound("Renders");
-			this.renderHandler = NonNullList.withSize(
-					nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : this.stackHandler.getSlots(),
-					true);
-			ListTag tagList = tag.getList("Renders", Tag.TAG_COMPOUND);
-
-			for (int i = 0; i < tagList.size(); i++) {
-				CompoundTag tags = tagList.getCompound(i);
-				int slot = tags.getInt("Slot");
-
-				if (slot >= 0 && slot < this.renderHandler.size()) {
-					this.renderHandler.set(slot, tags.getBoolean("Render"));
-				}
-			}
-		}
-
-		if (nbt.contains("SizeShift")) {
-			int sizeShift = nbt.getInt("SizeShift");
-
-			if (sizeShift != 0) {
-				this.addLegacyChange(sizeShift);
-			}
-		}
-		this.cosmetic = nbt.contains("HasCosmetic") ? nbt.getBoolean("HasCosmetic") : this.cosmetic;
-		this.visible = nbt.contains("Visible") ? nbt.getBoolean("Visible") : this.visible;
-		this.canToggleRender =
-				nbt.contains("RenderToggle") ? nbt.getBoolean("RenderToggle") : this.canToggleRender;
-
 		if (nbt.contains("DropRule")) {
 			this.dropRule =
 					EnumUtils.getEnum(ICurio.DropRule.class, nbt.getString("DropRule"), this.dropRule);
@@ -279,21 +211,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 
 	public CompoundTag getSyncTag() {
 		CompoundTag compoundNBT = new CompoundTag();
-		compoundNBT.put("Stacks", this.stackHandler.serializeNBT());
-		compoundNBT.put("Cosmetics", this.cosmeticStackHandler.serializeNBT());
-
-		ListTag nbtTagList = new ListTag();
-
-		for (int i = 0; i < this.renderHandler.size(); i++) {
-			CompoundTag tag = new CompoundTag();
-			tag.putInt("Slot", i);
-			nbtTagList.add(tag);
-		}
-		compoundNBT.putBoolean("HasCosmetic", this.cosmetic);
-		compoundNBT.putBoolean("Visible", this.visible);
-		compoundNBT.putBoolean("RenderToggle", this.canToggleRender);
 		compoundNBT.putString("DropRule", this.dropRule.toString());
-		compoundNBT.putInt("BaseSize", this.baseSize);
 
 		if (!this.modifiers.isEmpty()) {
 			ListTag list = new ListTag();
@@ -307,33 +225,6 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 	}
 
 	public void applySyncTag(CompoundTag tag) {
-
-		if (tag.contains("BaseSize")) {
-			this.baseSize = tag.getInt("BaseSize");
-		}
-
-		if (tag.contains("Stacks")) {
-			this.stackHandler.deserializeNBT(tag.getCompound("Stacks"));
-		}
-
-		if (tag.contains("Cosmetics")) {
-			this.cosmeticStackHandler.deserializeNBT(tag.getCompound("Cosmetics"));
-		}
-
-		renderHandler = NonNullList.withSize(stackHandler.getSlots(), true);
-
-		if (tag.contains("SizeShift")) {
-			int sizeShift = tag.getInt("SizeShift");
-
-			if (sizeShift != 0) {
-				this.addLegacyChange(sizeShift);
-			}
-		}
-		this.cosmetic = tag.contains("HasCosmetic") ? tag.getBoolean("HasCosmetic") : this.cosmetic;
-		this.visible = tag.contains("Visible") ? tag.getBoolean("Visible") : this.visible;
-		this.canToggleRender =
-				tag.contains("RenderToggle") ? tag.getBoolean("RenderToggle") : this.canToggleRender;
-
 		if (tag.contains("DropRule")) {
 			this.dropRule =
 					EnumUtils.getEnum(ICurio.DropRule.class, tag.getString("DropRule"), this.dropRule);
@@ -439,34 +330,27 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 	}
 
 	public void update() {
-
 		if (this.update) {
 			this.update = false;
-			double baseSize = this.baseSize;
-
+			double baseSize = 0;
 			for (AttributeModifier mod : this.getModifiersByOperation(
 					AttributeModifier.Operation.ADDITION)) {
 				baseSize += mod.getAmount();
 			}
 			double size = baseSize;
-
 			for (AttributeModifier mod : this.getModifiersByOperation(
 					AttributeModifier.Operation.MULTIPLY_BASE)) {
-				size += this.baseSize * mod.getAmount();
+				size += baseSize * mod.getAmount();
 			}
-
 			for (AttributeModifier mod : this.getModifiersByOperation(
 					AttributeModifier.Operation.MULTIPLY_TOTAL)) {
 				size *= mod.getAmount();
 			}
-
 			if (size != this.getSlots()) {
 				this.resize((int) size);
-
 				if (this.itemHandler != null && this.itemHandler.getWearer() != null) {
 					MinecraftForge.EVENT_BUS.post(
 							new SlotModifiersUpdatedEvent(this.itemHandler.getWearer(), Set.of(this.identifier)));
-
 					if (this.itemHandler.getWearer() instanceof Player player &&
 							player.containerMenu instanceof CuriosContainer) {
 						((CuriosContainer) player.containerMenu).resetSlots();
@@ -486,12 +370,11 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 				change = change * -1;
 				//this.loseStacks(this.stackHandler, identifier, change);
 				this.stackHandler.shrink(change);
-				this.cosmeticStackHandler.shrink(change);
 			} else {
 				this.stackHandler.grow(change);
-				this.cosmeticStackHandler.grow(change);
 			}
-			renderHandler = NonNullList.withSize(newSize, true);
+			renderHandler = NonNullList.withSize(newSize, false);
+			this.cosmeticHandler = new EmptyDynamicStackHandler(newSize);
 		}
 	}
 
@@ -510,7 +393,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 			ItemStack stack = stackHandler.getStackInSlot(i);
 			drops.add(stackHandler.getStackInSlot(i));
 			LivingEntity entity = this.itemHandler.getWearer();
-			SlotContext slotContext = new SlotContext(identifier, entity, i, false, this.visible);
+			SlotContext slotContext = new SlotContext(identifier, entity, i, false, false);
 
 			if (!stack.isEmpty()) {
 				UUID uuid = UUID.nameUUIDFromBytes((identifier + i).getBytes());
@@ -554,6 +437,11 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 	@Override
 	public int hashCode() {
 		return Objects.hash(identifier);
+	}
+
+	public ICurioStacksHandler from(ICurioStacksHandler e) {
+		copyModifiers(e);
+		return this;
 	}
 
 }

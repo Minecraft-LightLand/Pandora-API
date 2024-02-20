@@ -39,7 +39,6 @@ public class PandoraUpdateHandler {
 			String identifier
 	) {
 		IDynamicStackHandler stackHandler = stacksHandler.getStacks();
-		IDynamicStackHandler cosmeticStackHandler = stacksHandler.getCosmeticStacks();
 
 		for (int i = 0; i < stacksHandler.getSlots(); i++) {
 			NonNullList<Boolean> renderStates = stacksHandler.getRenders();
@@ -104,15 +103,6 @@ public class PandoraUpdateHandler {
 						}
 					}
 					stackHandler.setPreviousStackInSlot(i, stack.copy());
-				}
-				ItemStack cosmeticStack = cosmeticStackHandler.getStackInSlot(i);
-				ItemStack prevCosmeticStack = cosmeticStackHandler.getPreviousStackInSlot(i);
-				if (!ItemStack.matches(cosmeticStack, prevCosmeticStack)) {
-					syncCurios(livingEntity, cosmeticStack,
-							CuriosApi.getCurio(cosmeticStack),
-							CuriosApi.getCurio(prevCosmeticStack), identifier, i, true,
-							true, SPacketSyncStack.HandlerType.COSMETIC);
-					cosmeticStackHandler.setPreviousStackInSlot(i, cosmeticStack.copy());
 				}
 				Set<ICurioStacksHandler> updates = handler.getUpdatingInventories();
 				if (!updates.isEmpty()) {
