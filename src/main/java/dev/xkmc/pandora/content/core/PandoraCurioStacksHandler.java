@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -368,7 +367,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 
 			if (currentSize > newSize) {
 				change = change * -1;
-				//this.loseStacks(this.stackHandler, identifier, change);
+				this.loseStacks(this.stackHandler, identifier, change);
 				this.stackHandler.shrink(change);
 			} else {
 				this.stackHandler.grow(change);
@@ -419,7 +418,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 			}
 			stackHandler.setStackInSlot(i, ItemStack.EMPTY);
 		}
-		drops.forEach(this.itemHandler::loseInvalidStack);
+		//drops.forEach(this.itemHandler::loseInvalidStack);
 	}
 
 	@Override
