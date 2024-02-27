@@ -416,7 +416,7 @@ public class PandoraCurioStacksHandler implements ICurioStacksHandler {
 				this.itemHandler.removeSlotModifiers(slots);
 				CuriosApi.getCurio(stack).ifPresent(curio -> curio.onUnequip(slotContext, ItemStack.EMPTY));
 			}
-			stackHandler.setStackInSlot(i, ItemStack.EMPTY);
+			//stackHandler.setStackInSlot(i, ItemStack.EMPTY);
 		}
 		//drops.forEach(this.itemHandler::loseInvalidStack);
 	}
