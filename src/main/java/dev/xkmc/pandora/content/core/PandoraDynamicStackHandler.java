@@ -30,7 +30,8 @@ public class PandoraDynamicStackHandler extends InheritedItemStackHandler implem
 
 	@Override
 	public void setPreviousStackInSlot(int slot, @Nonnull ItemStack stack) {
-		this.validateSlotIndex(slot);
+		if (!validateSlotIndex(slot)) return;
+		if (slot < 0 || slot >= previousStacks.size()) return;
 		this.previousStacks.set(slot, stack);
 		this.onContentsChanged(slot);
 	}
@@ -38,7 +39,8 @@ public class PandoraDynamicStackHandler extends InheritedItemStackHandler implem
 	@Nonnull
 	@Override
 	public ItemStack getPreviousStackInSlot(int slot) {
-		this.validateSlotIndex(slot);
+		if (!validateSlotIndex(slot)) return ItemStack.EMPTY;
+		if (slot < 0 || slot >= previousStacks.size()) return ItemStack.EMPTY;
 		return this.previousStacks.get(slot);
 	}
 

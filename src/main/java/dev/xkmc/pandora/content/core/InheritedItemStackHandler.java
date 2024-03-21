@@ -24,9 +24,8 @@ public class InheritedItemStackHandler implements IItemHandler, IItemHandlerModi
 		data.buildStackData(actualSize);
 	}
 
-	protected void validateSlotIndex(int slot) {
-		if (slot < 0 || slot >= actualSize)
-			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + actualSize + ")");
+	protected boolean validateSlotIndex(int slot) {
+		return slot >= 0 && slot < actualSize;
 	}
 
 	protected void onContentsChanged(int slot) {
