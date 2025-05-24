@@ -1,0 +1,14 @@
+// 1.21.1	2025-05-24T17:06:33.295825	Registrate Provider for pandora [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider, Patchouli Provider, Tags (mob_effect), Tags (attribute), Tags (damage_type)]
+3ef1369ea114bfaa2af385b617d5923396d1388d assets/pandora/lang/en_ud.json
+58d4da16f18a406cbe3ab0738bcffc1df5ce44ef assets/pandora/lang/en_us.json
+21f0534c42d082c2583c29a6a2734b969e123342 assets/pandora/models/item/pandora_bracelet.json
+3f4a7ff6fcdda14fb239d354e50beb068724a485 assets/pandora/models/item/pandora_necklace.json
+874dae58646390446bd583eb1bbdc7f5ef161639 data/curios/tags/item/bracelet.json
+1f417a4628d47deebde33d670f95ed9b399a81fa data/curios/tags/item/necklace.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/curios/tags/item/pandora.json
+93b79a24b06b05fb4e6901ff9380d5e8d76f10de data/l2hostility/tags/item/no_seal.json
+d15064059ecb5fa57a4fd76375e4dd557ce51507 data/pandora/advancement/recipes/misc/pandora_bracelet.json
+15de077ab65e53155a2c5fb03c9416d3a3c304f7 data/pandora/advancement/recipes/misc/pandora_necklace.json
+d202a01fcd7af9e941c765afb646a78a0ecb8212 data/pandora/recipe/pandora_bracelet.json
+897974f53c6e76a4a871f009d24a3ab777872968 data/pandora/recipe/pandora_necklace.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/pandora/tags/item/allow_duplicates.json

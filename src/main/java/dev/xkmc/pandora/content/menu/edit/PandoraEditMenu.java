@@ -1,18 +1,22 @@
 package dev.xkmc.pandora.content.menu.edit;
 
-import dev.xkmc.l2library.base.menu.base.BaseContainerMenu;
-import dev.xkmc.l2library.base.menu.base.SpriteManager;
-import dev.xkmc.l2library.util.annotation.ServerOnly;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
-import dev.xkmc.l2tabs.compat.BaseCuriosListMenu;
+import dev.xkmc.l2core.base.menu.base.BaseContainerMenu;
+import dev.xkmc.l2core.base.menu.base.SpriteManager;
+import dev.xkmc.l2menustacker.click.writable.ContainerCallback;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
+import dev.xkmc.l2tabs.compat.common.BaseCuriosListMenu;
 import dev.xkmc.pandora.content.base.IPandoraHolder;
-import net.minecraft.network.FriendlyByteBuf;
+import dev.xkmc.pandora.init.Pandora;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.SlotItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 public class PandoraEditMenu extends BaseContainerMenu<PandoraEditMenu> {
 
@@ -21,47 +25,48 @@ public class PandoraEditMenu extends BaseContainerMenu<PandoraEditMenu> {
 		return BaseCuriosListMenu.MANAGER[Math.min(Math.max(row - 3, 0), 3)];
 	}
 
-	public static PandoraEditMenu fromNetwork(MenuType<PandoraEditMenu> type, int windowId, Inventory inv, FriendlyByteBuf buf) {
+	public static PandoraEditMenu fromNetwork(MenuType<PandoraEditMenu> type, int windowId, Inventory inv, RegistryFriendlyByteBuf buf) {
 		PlayerSlot<?> slot = PlayerSlot.read(buf);
 		int row = buf.readInt();
-		return new PandoraEditMenu(type, windowId, inv, slot, row);
+		return new PandoraEditMenu(type, windowId, inv, slot, row, null);
 	}
 
 	protected final Player player;
 	public final PlayerSlot<?> item_slot;
 	protected final IItemHandlerModifiable handler;
+	private final @Nullable ContainerCallback callback;
 
 	public PandoraEditMenu(MenuType<PandoraEditMenu> type, int windowId, Inventory inventory,
-						   PlayerSlot<?> hand, int size) {
+						   PlayerSlot<?> hand, int size, @Nullable ContainerCallback callback) {
 		super(type, windowId, inventory, getManager(size), menu -> new SimpleContainer(0), false);
 		this.item_slot = hand;
 		this.player = inventory.player;
+		this.callback = callback;
 		ItemStack stack = getStack();
-		this.handler = ((IPandoraHolder) stack.getItem()).getCap(stack).get();
+		IItemHandlerModifiable candidate = null;
+		if (stack.getItem() instanceof IPandoraHolder holder) {
+			var opt = holder.getCap(stack);
+			if (opt.isPresent()) {
+				candidate = opt.get();
+			}
+		}
+		this.handler = candidate != null ? candidate : new PandoraInvWrapper(new SimpleContainer(size));
 		this.addSlot("grid", handler.getSlots());
+
 	}
 
 	protected void addSlot(String name, int size) {
 		int current = added;
-		this.sprite.get().getSlot(name, (x, y) -> added - current < size ? new PandoraSlot(handler, this.added++, x, y) : null, this::addSlot);
+		getLayout().getSlot(name, (x, y) -> added - current < size ? new SlotItemHandler(handler, this.added++, x, y) : null, this::addSlot);
 	}
 
 	private ItemStack stack_cache = ItemStack.EMPTY;
 
-	@ServerOnly
 	@Override
 	public boolean stillValid(Player player) {
-		ItemStack oldStack = stack_cache;
-		ItemStack newStack = getStackRaw();
-		if (getStackRaw().isEmpty() || oldStack != newStack) {
-			return false;
-		}
-		ItemStack stack = getStack();
-		if (stack.getItem() instanceof IPandoraHolder holder) {
-			var opt = holder.getCap(stack);
-			return opt.isPresent() && opt.get() == handler;
-		}
-		return false;
+		ItemStack oldStack = this.stack_cache;
+		ItemStack newStack = this.getStackRaw();
+		return !this.getStackRaw().isEmpty() && oldStack == newStack;
 	}
 
 	public ItemStack getStack() {
@@ -87,9 +92,39 @@ public class PandoraEditMenu extends BaseContainerMenu<PandoraEditMenu> {
 			moved = this.moveItemStackTo(stack, 36, 36 + n, false);
 		}
 		if (moved) {
-			this.slots.get(id).setChanged();
+			this.slots.get(id).set(stack);
 		}
 		return ItemStack.EMPTY;
+	}
+
+
+	protected boolean moveItemStackTo(ItemStack stack, int start, int end, boolean reverse) {
+		if (stack.isEmpty()) return false;
+		boolean flag = false;
+		int i;
+		if (reverse) {
+			i = end - 1;
+		} else {
+			i = start;
+		}
+		while (true) {
+			if (reverse) {
+				if (i < start) break;
+			} else if (i >= end) break;
+			Slot slot = this.slots.get(i);
+			ItemStack inSlot = slot.getItem();
+			if (inSlot.isEmpty() && slot.mayPlace(stack)) {
+				int l = slot.getMaxStackSize(stack);
+				slot.setByPlayer(stack.split(Math.min(stack.getCount(), l)));
+				slot.setChanged();
+				flag = true;
+				if (stack.isEmpty())
+					break;
+			}
+			if (reverse) --i;
+			else ++i;
+		}
+		return flag;
 	}
 
 }

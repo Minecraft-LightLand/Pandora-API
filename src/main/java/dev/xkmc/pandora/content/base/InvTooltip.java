@@ -12,8 +12,7 @@ public record InvTooltip(IPandoraHolder item, ItemStack stack) implements Toolti
 		if (!Screen.hasShiftDown()) {
 			return Optional.empty();
 		}
-		var list = IPandoraHolder.getListTag(stack);
-		if (!list.isEmpty()) {
+		if (!IPandoraHolder.isEmpty(stack)) {
 			return Optional.of(new InvTooltip(item, stack));
 		}
 		return Optional.empty();

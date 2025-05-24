@@ -1,17 +1,15 @@
 package dev.xkmc.pandora.content.base;
 
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
-import dev.xkmc.pandora.content.core.IPandoraInvGetter;
-import dev.xkmc.pandora.content.core.PandoraInfo;
-import dev.xkmc.pandora.content.core.PandoraInvGetter;
+import dev.xkmc.l2menustacker.click.writable.ContainerCallback;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import dev.xkmc.pandora.init.data.PandoraTagGen;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,59 +17,56 @@ import java.util.Optional;
 
 public interface IPandoraHolder {
 
-	static ListTag getListTag(ItemStack stack) {
-		var tag = stack.getOrCreateTag();
-		if (tag.contains("PandoraCharms")) {
-			return stack.getOrCreateTag().getList("PandoraCharms", Tag.TAG_COMPOUND);
-		} else {
-			return new ListTag();
-		}
-	}
-
-	static void setListTag(ItemStack stack, ListTag list) {
-		stack.getOrCreateTag().put("PandoraCharms", list);
-	}
-
 	static List<ItemStack> getItems(ItemStack stack) {
-		List<ItemStack> ans = new ArrayList<>();
-		ListTag tag = getListTag(stack);
-		for (Tag value : tag) {
-			if (value instanceof CompoundTag ctag) {
-				ItemStack i = ItemStack.of(ctag);
-				ans.add(i);
-			}
+		if (!(stack.getItem() instanceof IPandoraHolder pandora))
+			return List.of();
+		var handler = pandora.getCap(stack);
+		if (handler.isEmpty()) return List.of();
+		List<ItemStack> list = new ArrayList<>();
+		for (int i = 0; i < handler.get().getSlots(); i++) {
+			list.add(handler.get().getStackInSlot(i));
 		}
-		if (!ans.isEmpty()) {
-			int size = ((IPandoraHolder) stack.getItem()).getSlots(stack);
-			while (ans.size() < size) {
-				ans.add(ItemStack.EMPTY);
-			}
+		return list;
+	}
+
+	static ICurio[] getCurios(ItemStack stack) {
+		if (!(stack.getItem() instanceof IPandoraHolder pandora))
+			return new ICurio[0];
+		var handler = pandora.getCap(stack);
+		if (handler.isEmpty()) return new ICurio[0];
+		int n = handler.get().getSlots();
+		ICurio[] ans = new ICurio[n];
+		for (int i = 0; i < n; i++) {
+			ans[i] = CuriosApi.getCurio(handler.get().getStackInSlot(i)).orElse(null);
 		}
 		return ans;
 	}
 
-	static void setItems(ItemStack stack, List<ItemStack> list) {
-		ListTag tag = new ListTag();
-		for (int i = 0; i < list.size(); i++) {
-			tag.add(i, list.get(i).save(new CompoundTag()));
+	static boolean isEmpty(ItemStack stack) {
+		if (!(stack.getItem() instanceof IPandoraHolder pandora))
+			return true;
+		var handler = pandora.getCap(stack);
+		if (handler.isEmpty()) return true;
+		for (int i = 0; i < handler.get().getSlots(); i++) {
+			if (!handler.get().getStackInSlot(i).isEmpty())
+				return false;
 		}
-		IPandoraHolder.setListTag(stack, tag);
+		return true;
 	}
 
-	default IPandoraInvGetter getSupplier(String key, int i, ItemStack stack) {
-		return new PandoraInvGetter(key, i, new PandoraInfo(stack.getHoverName(), getSlots(stack)));
+	default Optional<IItemHandlerModifiable> getCap(ItemStack stack) {
+		var ans = stack.getCapability(Capabilities.ItemHandler.ITEM);
+		if (ans instanceof IItemHandlerModifiable mod)
+			return Optional.of(mod);
+		return Optional.empty();
 	}
 
 	int getSlots(ItemStack stack);
 
+	void open(ServerPlayer player, PlayerSlot<?> slot, ItemStack stack, @Nullable ContainerCallback container);
+
 	default boolean isItemValid(int slot, ItemStack stack) {
 		return stack.is(PandoraTagGen.PANDORA_SLOT);
 	}
-
-	default Optional<IItemHandlerModifiable> getCap(ItemStack stack) {
-		return stack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().map(e -> e instanceof IItemHandlerModifiable mod ? mod : null);
-	}
-
-	void open(ServerPlayer player, PlayerSlot<?> slot, ItemStack stack);
 
 }

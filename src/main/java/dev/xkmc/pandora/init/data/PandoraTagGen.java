@@ -9,13 +9,11 @@ import net.minecraft.world.item.Item;
 
 public class PandoraTagGen {
 
-	public static final TagKey<Item> PANDORA_SLOT = ItemTags.create(new ResourceLocation("curios", "pandora_charm"));
-
-	public static final TagKey<Item> ALLOW_DUPLICATE = ItemTags.create(new ResourceLocation(Pandora.MODID, "allow_duplicates"));
-	public static final TagKey<Item> NECKLACE = ItemTags.create(new ResourceLocation("curios", "necklace"));
-	public static final TagKey<Item> BRACELET = ItemTags.create(new ResourceLocation("curios", "bracelet"));
-
-	public static final TagKey<Item> NO_SEAL = ItemTags.create(new ResourceLocation("l2hostility", "no_seal"));
+	public static final TagKey<Item> PANDORA_SLOT = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", PandoraSlotGen.NAME));
+	public static final TagKey<Item> ALLOW_DUPLICATE = ItemTags.create(ResourceLocation.fromNamespaceAndPath(Pandora.MODID, "allow_duplicates"));
+	public static final TagKey<Item> NECKLACE = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "necklace"));
+	public static final TagKey<Item> BRACELET = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "bracelet"));
+	public static final TagKey<Item> NO_SEAL = ItemTags.create(ResourceLocation.fromNamespaceAndPath("l2hostility", "no_seal"));
 
 	public static void onItemTagGen(RegistrateItemTagsProvider pvd) {
 		pvd.addTag(ALLOW_DUPLICATE);

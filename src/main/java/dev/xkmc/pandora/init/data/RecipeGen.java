@@ -3,6 +3,7 @@ package dev.xkmc.pandora.init.data;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.util.DataIngredient;
 import dev.xkmc.pandora.init.registrate.PandoraItems;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -12,8 +13,6 @@ import net.minecraft.world.item.Items;
 import java.util.function.BiFunction;
 
 public class RecipeGen {
-
-	private static final String currentFolder = "";
 
 	public static void genRecipe(RegistrateRecipeProvider pvd) {
 		unlock(pvd, ShapedRecipeBuilder.shaped(RecipeCategory.MISC, PandoraItems.PANDORA_NECKLACE.get())::unlockedBy, Items.CHAIN)
@@ -29,8 +28,8 @@ public class RecipeGen {
 				.save(pvd);
 	}
 
-	public static <T> T unlock(RegistrateRecipeProvider pvd, BiFunction<String, InventoryChangeTrigger.TriggerInstance, T> func, Item item) {
-		return func.apply("has_" + pvd.safeName(item), DataIngredient.items(item).getCritereon(pvd));
+	public static <T> T unlock(RegistrateRecipeProvider pvd, BiFunction<String, Criterion<InventoryChangeTrigger.TriggerInstance>, T> func, Item item) {
+		return func.apply("has_" + pvd.safeName(item), DataIngredient.items(item).getCriterion(pvd));
 	}
 
 }

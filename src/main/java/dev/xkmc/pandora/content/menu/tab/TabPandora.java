@@ -5,21 +5,20 @@
 
 package dev.xkmc.pandora.content.menu.tab;
 
-import dev.xkmc.l2tabs.tabs.core.BaseTab;
+import dev.xkmc.l2tabs.tabs.core.TabBase;
 import dev.xkmc.l2tabs.tabs.core.TabManager;
 import dev.xkmc.l2tabs.tabs.core.TabToken;
-import dev.xkmc.pandora.init.Pandora;
+import dev.xkmc.l2tabs.tabs.inventory.InvTabData;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 
-public class TabPandora extends BaseTab<TabPandora> {
+public class TabPandora extends TabBase<InvTabData, TabPandora> {
 
-	public TabPandora(TabToken<TabPandora> token, TabManager manager, ItemStack stack, Component title) {
-		super(token, manager, stack, title);
+	public TabPandora(int index, TabToken<InvTabData, TabPandora> token, TabManager<InvTabData> manager, Component title) {
+		super(index, token, manager, title);
 	}
 
 	public void onTabClicked() {
-		Pandora.HANDLER.toServer(new OpenPandoraPacket(OpenPandoraHandler.CURIO_OPEN));
+		//Pandora.HANDLER.toServer(new OpenPandoraPacket(OpenPandoraHandler.CURIO_OPEN));
 	}
 
 }

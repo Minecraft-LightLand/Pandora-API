@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 
 public record InvClientTooltip(InvTooltip inv) implements ClientTooltipComponent {
 
-	public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation("textures/gui/container/bundle.png");
+	public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.withDefaultNamespace("container/bundle/slot");
 
 	@Override
 	public int getHeight() {
@@ -38,7 +38,7 @@ public record InvClientTooltip(InvTooltip inv) implements ClientTooltipComponent
 	}
 
 	private void blit(GuiGraphics g, int x, int y) {
-		g.blit(TEXTURE_LOCATION, x, y, 0, 0, 0, 18, 18, 128, 128);
+		g.blitSprite(TEXTURE_LOCATION, x, y, 18, 20);
 	}
 
 
