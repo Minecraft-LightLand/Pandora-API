@@ -1,5 +1,6 @@
 package dev.xkmc.pandora.init.registrate;
 
+import com.tterrag.registrate.util.CreativeModeTabModifier;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
 import dev.xkmc.l2core.init.reg.simple.DCReg;
@@ -7,6 +8,8 @@ import dev.xkmc.l2core.init.reg.simple.DCVal;
 import dev.xkmc.pandora.content.base.PandoraHolder;
 import dev.xkmc.pandora.init.Pandora;
 import dev.xkmc.pandora.init.data.PandoraTagGen;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.component.ItemContainerContents;
 
@@ -32,6 +35,16 @@ public class PandoraItems {
 				.tag(PandoraTagGen.BRACELET).register();
 
 		DC_ITEMS = DC.reg("backpack_content", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC, true);
+
+		Pandora.REGISTRATE.addRegisterCallback(Registries.ITEM, () -> Pandora.REGISTRATE.modifyCreativeModeTab(TAB.key(), PandoraItems::fillItems));
+	}
+
+	private static void fillItems(CreativeModeTabModifier modifier) {
+		for (var e : BuiltInRegistries.ITEM) {
+			if (e.builtInRegistryHolder().is(PandoraTagGen.PANDORA_SLOT)) {
+				modifier.accept(e.getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_TAB_ONLY);
+			}
+		}
 	}
 
 	public static void register() {

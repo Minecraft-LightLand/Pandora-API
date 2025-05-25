@@ -12,23 +12,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(ICuriosItemHandler.class)
 public interface ICuriosItemHandlerMixin {
 
 	@Shadow
-	List<SlotResult> findCurios(Predicate<ItemStack> predicate);
+	Optional<SlotResult> findFirstCurio(Predicate<ItemStack> predicate, String s);
 
 	@Inject(method = "isEquipped(Lnet/minecraft/world/item/Item;)Z", cancellable = true, at = @At("HEAD"))
 	default void pandora$isEquipped(Item item, CallbackInfoReturnable<Boolean> cir) {
-		if (item.builtInRegistryHolder().is(PandoraTagGen.PANDORA_SLOT)) {
-			var list = findCurios(i -> i.getItem() instanceof IPandoraHolder);
-			for (var e : list) {
-				if (e.stack().is(item)) {
-					cir.setReturnValue(true);
-				}
+		var holder = item.builtInRegistryHolder();
+		if (holder.is(PandoraTagGen.PANDORA_SLOT)) {
+			var id = "pandora:" + holder.unwrapKey().orElseThrow().location();
+			if (findFirstCurio(stack -> IPandoraHolder.findInside(stack, item), id).isPresent()) {
+				cir.setReturnValue(true);
 			}
 		}
 	}

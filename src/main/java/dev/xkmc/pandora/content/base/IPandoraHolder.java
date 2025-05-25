@@ -4,6 +4,7 @@ import dev.xkmc.l2menustacker.click.writable.ContainerCallback;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import dev.xkmc.pandora.init.data.PandoraTagGen;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -52,6 +53,18 @@ public interface IPandoraHolder {
 				return false;
 		}
 		return true;
+	}
+
+	static boolean findInside(ItemStack stack, Item item) {
+		if (!(stack.getItem() instanceof IPandoraHolder pandora))
+			return false;
+		var handler = pandora.getCap(stack);
+		if (handler.isEmpty()) return false;
+		for (int i = 0; i < handler.get().getSlots(); i++) {
+			if (handler.get().getStackInSlot(i).is(item))
+				return true;
+		}
+		return false;
 	}
 
 	default Optional<IItemHandlerModifiable> getCap(ItemStack stack) {
